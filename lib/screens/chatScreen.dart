@@ -42,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
     id: "1",
     firstName: "NyaySahayak",
     profileImage:
-        "https://image.cdn2.seaart.me/2024-10-23/cscckq5e878c738055lg-1/0bbee1f9fdfc5c1321df22ce155731c3_high.webp",
+        "https://image.cdn2.seaart.me/2024-02-11/cn47s2de878c73f76sig/9ec34ac1dd435fbe18a06c1d833daa1bd60ba809_high.webp",
   );
 
   Future<void> _handleMessage(ChatMessage message) async {

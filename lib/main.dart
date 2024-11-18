@@ -51,9 +51,9 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: LayoutBuilder(builder: (context, Constraints) {
             if (Constraints.maxWidth > 1400) {
-              return VerifyLawyersScreen();
+              return const VerifyLawyersScreen();
             } else {
-              return BottomBar();
+              return const BottomBar();
             }
           })
 

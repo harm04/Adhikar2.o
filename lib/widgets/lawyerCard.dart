@@ -16,7 +16,8 @@ class LawyerCard extends StatelessWidget {
       required this.location,
       required this.ratings,
       required this.caseWon,
-      required this.fees, required this.experience});
+      required this.fees,
+      required this.experience});
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +29,10 @@ class LawyerCard extends StatelessWidget {
               width: 90,
               height: 90,
               clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(15) 
-                  ),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
               //
-              child: Image.asset(
+              child: Image.network(
                 profilePic,
                 fit: BoxFit.cover,
               ),
@@ -57,11 +56,16 @@ class LawyerCard extends StatelessWidget {
                               lawyerName,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(width: 10,),
-                            Text('($experience)', style: TextStyle(color: Colors.black87),)
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '($experience)',
+                              style: const TextStyle(color: Colors.black87),
+                            )
                           ],
                         ),
                         Row(
@@ -91,7 +95,7 @@ class LawyerCard extends StatelessWidget {
                           location,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: TextStyle(color: Colors.black87),
+                          style: const TextStyle(color: Colors.black87),
                         ),
                       ],
                     ),
@@ -103,7 +107,7 @@ class LawyerCard extends StatelessWidget {
                         ),
                         Text(
                           caseWon,
-                          style: TextStyle(color: Colors.black87),
+                          style: const TextStyle(color: Colors.black87),
                         ),
                       ],
                     ),
@@ -115,7 +119,7 @@ class LawyerCard extends StatelessWidget {
                         ),
                         Text(
                           fees,
-                          style: TextStyle(color: Colors.black87),
+                          style: const TextStyle(color: Colors.black87),
                         ),
                       ],
                     ),

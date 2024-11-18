@@ -1,6 +1,11 @@
+
+
+
+import 'package:adhikar2_o/models/lawyerModel.dart';
 import 'package:adhikar2_o/screens/lawyerProfile.dart';
 import 'package:adhikar2_o/utils/colors.dart';
-import 'package:adhikar2_o/widgets/lawyerCrad.dart';
+import 'package:adhikar2_o/widgets/lawyerCard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MarketPlaceScreen extends StatefulWidget {
@@ -145,44 +150,68 @@ class _MarketPlaceScreenState extends State<MarketPlaceScreen> {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const LawyerProfileScreen(
-                        caseWon: '45+',
-                        fees: '1999',
-                        lawyerName: 'Sam Altman',
-                        location: 'London, Sana',
-                        profilePic: 'assets/images/img_profile_pic.png',
-                        ratings: '4.0',
-                          experience: '8+',
-                        
-                      );
-                    }));
-                  },
-                  child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 18.0, vertical: 5),
-                      child: LawyerCard(
-                        caseWon: '45+',
-                        fees: '1999',
-                        lawyerName: 'Sam Altman',
-                        location: 'London, Sana',
-                        profilePic: 'assets/images/img_profile_pic.png',
-                        ratings: '4.0',
-                        experience: '8+',
-                      )),
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('Lawyers').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SliverToBoxAdapter(
+                  child: Center(child: CircularProgressIndicator()),
                 );
-              },
-              childCount: 50,
-            ),
+              }
+              if (snapshot.hasError) {
+                return SliverToBoxAdapter(
+                  child: Center(child: Text('Error: ${snapshot.error}')),
+                );
+              }
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const SliverToBoxAdapter(
+                  child: Center(child: Text('No lawyerModels found')),
+                );
+              }
+
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    LawyerModel lawyerModel =
+                            LawyerModel.fromSnap(snapshot.data!.docs[index]);
+
+             return      lawyerModel.approved=='true'?   GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return LawyerProfileScreen(
+                            caseWon: lawyerModel.casesWon,
+                            fees: '1999',
+                            lawyerName: lawyerModel.firstName,
+                            location: lawyerModel.address1,
+                            profilePic: lawyerModel.profImage,
+                            ratings: '2',
+                            experience: lawyerModel.experience,
+                          );
+                        }));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18.0, vertical: 5),
+                        child: LawyerCard(
+                          caseWon: lawyerModel.casesWon,
+                          fees: '1999',
+                          lawyerName: lawyerModel.firstName,
+                          location: lawyerModel.address1,
+                          profilePic: lawyerModel.profImage,
+                          ratings: '2',
+                          experience: lawyerModel.experience,
+                        ),
+                      ),
+                    ):SizedBox();
+                  },
+                  childCount: snapshot.data!.docs.length,
+                ),
+              );
+            },
           ),
         ],
       ),
     );
   }
 }
+

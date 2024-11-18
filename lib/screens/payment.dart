@@ -67,6 +67,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: GestureDetector(
           onTap: () {
             openCheckout();
+            
           },
           child: CustomButton(text: 'Razorpay')),
     ));

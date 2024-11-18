@@ -1,8 +1,14 @@
+import 'package:adhikar2_o/models/lawyerModel.dart';
+import 'package:adhikar2_o/models/userModel.dart';
+import 'package:adhikar2_o/provider/lawyerProvider.dart';
+import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/screens/myMeetings.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/customButton.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class ConfirmConsultation extends StatefulWidget {
@@ -23,10 +29,11 @@ class ConfirmConsultation extends StatefulWidget {
 class _ConfirmConsultationState extends State<ConfirmConsultation> {
   late Razorpay _razorpay;
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return MyMeetingsScreen();
+      return const MyMeetingsScreen();
     }));
   }
 
@@ -218,15 +225,50 @@ class _ConfirmConsultationState extends State<ConfirmConsultation> {
                 'Note :- Money will be deducted once you click on the Proceed to pay button.'),
           ),
           Padding(
-            padding: EdgeInsets.all(18.0),
+            padding: const EdgeInsets.all(18.0),
             child: GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  UserModel userModel =
+                      Provider.of<UserProvider>(context, listen: false).getUser;
+                  LawyerModel lawyerModel =
+                      Provider.of<LawyerProvider>(context, listen: false)
+                          .getLawyer;
+
+                          //if we want all meetings to be visible in my meetings section then just change meetinguid to a random uid
+                          String meetingUid='${userModel.uid.substring(userModel.uid.length - 5)}${lawyerModel.uid.substring(lawyerModel.uid.length - 5)}';
                   openCheckout(
                       razorpayAmount.toString(),
                       'Random',
                       'Consultation with lawyer',
                       '9999999999',
                       'har@gmail.com');
+                  print(
+                      'meeting id :$meetingUid');
+  
+                //creating a collection named meetings
+                  await FirebaseFirestore.instance
+                      .collection('Meetings')
+                      .doc(
+                          meetingUid)
+                      .set({
+                    "meetingUid":
+                         meetingUid,
+                    "lawyerName":
+                        '${lawyerModel.firstName} ${lawyerModel.lastName}',
+                    "clientName":
+                        '${userModel.firstName} ${userModel.lastName}',
+                    "time": widget.time,
+                    "date": widget.date,
+                  });
+
+                  //adding meeting uid in user collection
+                  await FirebaseFirestore.instance.collection('Users').doc(userModel.uid).update({
+                    "meetings":FieldValue.arrayUnion([meetingUid]),
+                  });
+                    //adding meeting uid in lawyer collection
+                  await FirebaseFirestore.instance.collection('Lawyers').doc(lawyerModel.uid).update({
+                    "meetings":FieldValue.arrayUnion([meetingUid]),
+                  });
                 },
                 child: CustomButton(text: 'Proceed to pay $totalAmount Rs')),
           )

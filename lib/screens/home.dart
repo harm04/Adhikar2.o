@@ -3,6 +3,7 @@ import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/screens/aiServices.dart';
 import 'package:adhikar2_o/screens/applyForLawyerScreen.dart';
 import 'package:adhikar2_o/screens/auth/loginScreen.dart';
+import 'package:adhikar2_o/screens/auth/siginScreen.dart';
 import 'package:adhikar2_o/screens/drawerScreens/emergencyScreen.dart';
 import 'package:adhikar2_o/screens/drawerScreens/filters.dart';
 import 'package:adhikar2_o/screens/drawerScreens/forms.dart';
@@ -13,6 +14,7 @@ import 'package:adhikar2_o/widgets/drawerItems.dart';
 import 'package:adhikar2_o/widgets/homeLaw.dart';
 import 'package:adhikar2_o/widgets/judgement.dart';
 import 'package:adhikar2_o/widgets/viewAllCard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -41,9 +43,37 @@ class _HomeScreenState extends State<HomeScreen> {
     }));
   }
 
+  loginForApplyingForLawyer() {
+    AlertDialog(
+      title: const Text(
+        'It seems you are not authenticated..!\nTo access AI services you need to signup',
+        style: TextStyle(color: Colors.black, fontSize: 18),
+      ),
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return const LoginScreen();
+              }));
+            },
+            child: const Text('Login')),
+        TextButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return const SignUpScreen();
+              }));
+            },
+            child: const Text('Signup')),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    UserModel userModel = Provider.of<UserProvider>(context).getUser;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
     // LawyerModel lawyerModel = Provider.of<LawyerProvider>(context).getLawyer;
 
     return Scaffold(
@@ -164,6 +194,37 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
+                                if (_auth.currentUser == null) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      'It seems you are not authenticated..!\nTo access AI services you need to signup',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 18),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pushReplacement(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return const LoginScreen();
+                                            }));
+                                          },
+                                          child: const Text('Login')),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pushReplacement(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return const SignUpScreen();
+                                            }));
+                                          },
+                                          child: const Text('Signup')),
+                                    ],
+                                  );
+                                }
+                                UserModel userModel =
+                                    Provider.of<UserProvider>(context).getUser;
                                 return userModel.type == 'pending'
                                     ? const VerificatoinPendingScreen()
                                     : const ApplyForLawyerScreen();
@@ -364,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }),
             ),
-            const Text('data')
+            // const Text('data')
           ],
         ),
       ),

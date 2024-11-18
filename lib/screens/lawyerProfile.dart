@@ -1,6 +1,8 @@
+import 'package:adhikar2_o/screens/auth/loginScreen.dart';
 import 'package:adhikar2_o/screens/confirmConsultation.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/customButton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -29,6 +31,7 @@ class LawyerProfileScreen extends StatefulWidget {
 class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
   TimeOfDay _timeOfDay = TimeOfDay.now();
   DateTime _dateTime = DateTime.now();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void _showTimePicker() {
     showTimePicker(context: context, initialTime: TimeOfDay.now())
@@ -121,12 +124,10 @@ class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
                   width: 250,
                   height: 250,
                   clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          15)
-                      ),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(15)),
                   //
-                  child: Image.asset(
+                  child: Image.network(
                     widget.profilePic,
                     fit: BoxFit.cover,
                   ),
@@ -307,8 +308,7 @@ class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
                 ),
               ),
               const Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18.0, vertical: 6),
+                padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 6),
                 child: Text(
                     maxLines: 20,
                     overflow: TextOverflow.ellipsis,
@@ -403,20 +403,25 @@ class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(18.0),
+                padding: const EdgeInsets.all(18.0),
                 child: GestureDetector(
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return ConfirmConsultation(
-                          amount: widget.fees,
-                          date:
-                              '${_dateTime.day.toString()}/${_dateTime.month.toString()}/${_dateTime.year.toString()}',
-                          time: _timeOfDay.format(context).toString(),
-                        );
+                        return _auth.currentUser == null
+                            ? const LoginScreen()
+                            : ConfirmConsultation(
+                                amount: widget.fees,
+                                date:
+                                    '${_dateTime.day.toString()}/${_dateTime.month.toString()}/${_dateTime.year.toString()}',
+                                time: _timeOfDay.format(context).toString(),
+                              );
                       }));
                     },
-                    child: CustomButton(text: 'Book Consultation')),
+                    child: CustomButton(
+                        text: _auth.currentUser == null
+                            ? 'Login to book consultation'
+                            : 'Book Consultation')),
               ),
               const SizedBox(
                 height: 30,
