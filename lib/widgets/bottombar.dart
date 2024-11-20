@@ -27,8 +27,8 @@ class _BottomBarState extends State<BottomBar> {
 
   List<Widget> pageList = [
     const HomeScreen(),
-    const Center(child: Text("page2()")),
-    const Center(child: Text(" LawScreen()")),
+    // const Center(child: Text("page2()")),
+    // const Center(child: Text(" LawScreen()")),
     const Center(child: MarketPlaceScreen()),
     const Center(child: ProfileScreen())
   ];
@@ -88,26 +88,26 @@ class _BottomBarState extends State<BottomBar> {
                 ),
                 backgroundColor: Colors.white,
               ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  const AssetImage('assets/icons/ic_document.png'),
-                  size: 40,
-                  color: (_page == 1) ? Colors.white : Colors.grey,
-                ),
-                backgroundColor: Colors.white,
-              ),
-              BottomNavigationBarItem(
-                  icon: ImageIcon(
-                    const AssetImage('assets/icons/ic_law.png'),
-                    size: 40,
-                    color: (_page == 2) ? Colors.white : Colors.grey,
-                  ),
-                  backgroundColor: Colors.white),
+              // BottomNavigationBarItem(
+              //   icon: ImageIcon(
+              //     const AssetImage('assets/icons/ic_document.png'),
+              //     size: 40,
+              //     color: (_page == 1) ? Colors.white : Colors.grey,
+              //   ),
+              //   backgroundColor: Colors.white,
+              // ),
+              // BottomNavigationBarItem(
+              //     icon: ImageIcon(
+              //       const AssetImage('assets/icons/ic_law.png'),
+              //       size: 40,
+              //       color: (_page == 2) ? Colors.white : Colors.grey,
+              //     ),
+              //     backgroundColor: Colors.white),
               BottomNavigationBarItem(
                 icon: ImageIcon(
                   const AssetImage('assets/icons/ic_marketplace.png'),
                   size: 20,
-                  color: (_page == 3) ? Colors.white : Colors.grey,
+                  color: (_page == 1) ? Colors.white : Colors.grey,
                 ),
                 backgroundColor: Colors.white,
               ),
@@ -115,7 +115,7 @@ class _BottomBarState extends State<BottomBar> {
                 icon: ImageIcon(
                   const AssetImage('assets/icons/ic_profile.png'),
                   size: 20,
-                  color: (_page == 4) ? Colors.white : Colors.grey,
+                  color: (_page == 2) ? Colors.white : Colors.grey,
                 ),
                 backgroundColor: Colors.white,
               ),

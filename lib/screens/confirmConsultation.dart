@@ -1,6 +1,4 @@
-import 'package:adhikar2_o/models/lawyerModel.dart';
 import 'package:adhikar2_o/models/userModel.dart';
-import 'package:adhikar2_o/provider/lawyerProvider.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/screens/myMeetings.dart';
 import 'package:adhikar2_o/utils/colors.dart';
@@ -14,13 +12,20 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 class ConfirmConsultation extends StatefulWidget {
   final String date;
   final String time;
+  final String profImage;
   final String amount;
+  final String uid;
+  final String firstName;
+  final String lastName;
 
   const ConfirmConsultation(
       {super.key,
       required this.date,
       required this.time,
-      required this.amount});
+      required this.amount,
+      required this.uid,
+      required this.firstName,
+      required this.lastName, required this.profImage});
 
   @override
   State<ConfirmConsultation> createState() => _ConfirmConsultationState();
@@ -30,7 +35,6 @@ class _ConfirmConsultationState extends State<ConfirmConsultation> {
   late Razorpay _razorpay;
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return const MyMeetingsScreen();
@@ -230,44 +234,49 @@ class _ConfirmConsultationState extends State<ConfirmConsultation> {
                 onTap: () async {
                   UserModel userModel =
                       Provider.of<UserProvider>(context, listen: false).getUser;
-                  LawyerModel lawyerModel =
-                      Provider.of<LawyerProvider>(context, listen: false)
-                          .getLawyer;
+                  // LawyerModel lawyerModel =
+                  //     Provider.of<LawyerProvider>(context, listen: false)
+                  //         .getLawyer;
 
-                          //if we want all meetings to be visible in my meetings section then just change meetinguid to a random uid
-                          String meetingUid='${userModel.uid.substring(userModel.uid.length - 5)}${lawyerModel.uid.substring(lawyerModel.uid.length - 5)}';
+                  //if we want all meetings to be visible in my meetings section then just change meetinguid to a random uid
+                  String meetingUid =
+                      '${widget.uid.substring(widget.uid.length - 5)}${widget.uid.substring(widget.uid.length - 5)}';
                   openCheckout(
                       razorpayAmount.toString(),
                       'Random',
                       'Consultation with lawyer',
                       '9999999999',
                       'har@gmail.com');
-                  print(
-                      'meeting id :$meetingUid');
-  
-                //creating a collection named meetings
+                  print('meeting id :$meetingUid');
+
+                  //creating a collection named meetings
                   await FirebaseFirestore.instance
                       .collection('Meetings')
-                      .doc(
-                          meetingUid)
+                      .doc(meetingUid)
                       .set({
-                    "meetingUid":
-                         meetingUid,
-                    "lawyerName":
-                        '${lawyerModel.firstName} ${lawyerModel.lastName}',
+                    "meetingUid": meetingUid,
+                    "lawyerName": '${widget.firstName} ${widget.lastName}',
                     "clientName":
                         '${userModel.firstName} ${userModel.lastName}',
                     "time": widget.time,
                     "date": widget.date,
+                    "status": "pending",
+                    "profImage":widget.profImage
                   });
 
                   //adding meeting uid in user collection
-                  await FirebaseFirestore.instance.collection('Users').doc(userModel.uid).update({
-                    "meetings":FieldValue.arrayUnion([meetingUid]),
+                  await FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(userModel.uid)
+                      .update({
+                    "meetings": FieldValue.arrayUnion([meetingUid]),
                   });
-                    //adding meeting uid in lawyer collection
-                  await FirebaseFirestore.instance.collection('Lawyers').doc(lawyerModel.uid).update({
-                    "meetings":FieldValue.arrayUnion([meetingUid]),
+                  //adding meeting uid in lawyer collection
+                  await FirebaseFirestore.instance
+                      .collection('Lawyers')
+                      .doc(widget.uid)
+                      .update({
+                    "meetings": FieldValue.arrayUnion([meetingUid]),
                   });
                 },
                 child: CustomButton(text: 'Proceed to pay $totalAmount Rs')),

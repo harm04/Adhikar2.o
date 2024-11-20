@@ -1,9 +1,14 @@
+import 'package:adhikar2_o/models/userModel.dart';
+import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -17,6 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final SpeechToText _speechToText = SpeechToText();
   bool islistening = false;
   String wordsSpoken = "";
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   void checkMic() async {
     bool micAvailable = await _speechToText.initialize();
@@ -44,8 +50,13 @@ class _ChatScreenState extends State<ChatScreen> {
     profileImage:
         "https://image.cdn2.seaart.me/2024-02-11/cn47s2de878c73f76sig/9ec34ac1dd435fbe18a06c1d833daa1bd60ba809_high.webp",
   );
+  String cleanResponse(String response) {
+    return response.replaceAll(RegExp(r'\*'), '');
+  }
 
   Future<void> _handleMessage(ChatMessage message) async {
+    UserModel userModel =
+        Provider.of<UserProvider>(context, listen: false).getUser;
     setState(() {
       messages.insert(0, message);
       isLoading = true;
@@ -59,8 +70,8 @@ class _ChatScreenState extends State<ChatScreen> {
       ''';
 
       await for (final event in gemini.streamGenerateContent(prompt)) {
-        final text = event.content?.parts?.firstOrNull?.text ?? '';
-
+        final rawText = event.content?.parts?.firstOrNull?.text ?? '';
+        final text = cleanResponse(rawText);
         if (text.isNotEmpty) {
           setState(() {
             partialResponse += text;
@@ -83,6 +94,18 @@ class _ChatScreenState extends State<ChatScreen> {
           });
         }
       }
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot userDoc = await transaction.get(
+            FirebaseFirestore.instance.collection("Users").doc(userModel.uid));
+
+        double currentCredits = userDoc["credits"] ?? 0;
+        double newCredits = (currentCredits - 2).clamp(0, currentCredits);
+
+        transaction.update(
+            FirebaseFirestore.instance.collection("Users").doc(userModel.uid),
+            {"credits": newCredits});
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),
@@ -108,7 +131,7 @@ class _ChatScreenState extends State<ChatScreen> {
           'NyaySahayak',
           style: TextStyle(color: Colors.white),
         ),
-         actions: [
+        actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: Row(
@@ -120,9 +143,32 @@ class _ChatScreenState extends State<ChatScreen> {
                 const SizedBox(
                   width: 5,
                 ),
-                const Text(
-                  '48 credits',
-                  style: TextStyle(color: Colors.white, fontSize: 17),
+               StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("Users")
+                      .doc(_auth.currentUser!.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+
+                    if (!snapshot.hasData || !snapshot.data!.exists) {
+                      return const Text('No Data');
+                    }
+
+                    // Fetch credits from Firestore document
+                    var currentCredits = snapshot.data!['credits'].toString() ?? 0;
+
+                    return Text(
+                      '$currentCredits credits',  // Display current credits
+                      style: const TextStyle(color: Colors.white, fontSize: 17),
+                    );
+                  },
                 ),
               ],
             ),

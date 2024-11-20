@@ -1,6 +1,3 @@
-
-
-
 import 'package:adhikar2_o/models/lawyerModel.dart';
 import 'package:adhikar2_o/screens/lawyerProfile.dart';
 import 'package:adhikar2_o/utils/colors.dart';
@@ -151,8 +148,11 @@ class _MarketPlaceScreenState extends State<MarketPlaceScreen> {
             ),
           ),
           StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('Lawyers').snapshots(),
+            
+            stream:
+                FirebaseFirestore.instance.collection('Lawyers').snapshots(),
             builder: (context, snapshot) {
+              
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SliverToBoxAdapter(
                   child: Center(child: CircularProgressIndicator()),
@@ -173,36 +173,42 @@ class _MarketPlaceScreenState extends State<MarketPlaceScreen> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     LawyerModel lawyerModel =
-                            LawyerModel.fromSnap(snapshot.data!.docs[index]);
+                        LawyerModel.fromSnap(snapshot.data!.docs[index]);
 
-             return      lawyerModel.approved=='true'?   GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return LawyerProfileScreen(
-                            caseWon: lawyerModel.casesWon,
-                            fees: '1999',
-                            lawyerName: lawyerModel.firstName,
-                            location: lawyerModel.address1,
-                            profilePic: lawyerModel.profImage,
-                            ratings: '2',
-                            experience: lawyerModel.experience,
-                          );
-                        }));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 18.0, vertical: 5),
-                        child: LawyerCard(
-                          caseWon: lawyerModel.casesWon,
-                          fees: '1999',
-                          lawyerName: lawyerModel.firstName,
-                          location: lawyerModel.address1,
-                          profilePic: lawyerModel.profImage,
-                          ratings: '2',
-                          experience: lawyerModel.experience,
-                        ),
-                      ),
-                    ):SizedBox();
+                    return lawyerModel.approved == 'true'
+                        ? GestureDetector(
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return LawyerProfileScreen(
+                                  caseWon: lawyerModel.casesWon,
+                                  fees: '1999',
+                                  firstName: lawyerModel.firstName,
+                                  lastName: lawyerModel.lastName,
+                                  uid: lawyerModel.uid,
+                                  location: lawyerModel.address1,
+                                  profilePic: lawyerModel.profImage,
+                                  ratings: '2',
+                                  experience: lawyerModel.experience,
+                                  profImage:lawyerModel.profImage
+                                );
+                              }));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18.0, vertical: 5),
+                              child: LawyerCard(
+                                caseWon: lawyerModel.casesWon,
+                                fees: '1999',
+                                lawyerName: lawyerModel.firstName,
+                                location: lawyerModel.address1,
+                                profilePic: lawyerModel.profImage,
+                                ratings: '2',
+                                experience: lawyerModel.experience,
+                              ),
+                            ),
+                          )
+                        : SizedBox();
                   },
                   childCount: snapshot.data!.docs.length,
                 ),
@@ -214,4 +220,3 @@ class _MarketPlaceScreenState extends State<MarketPlaceScreen> {
     );
   }
 }
-

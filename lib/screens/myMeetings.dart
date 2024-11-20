@@ -1,9 +1,12 @@
+import 'package:adhikar2_o/models/userModel.dart';
+import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/screens/videoCallScreen.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/meetingCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class MyMeetingsScreen extends StatefulWidget {
   const MyMeetingsScreen({super.key});
@@ -15,6 +18,8 @@ class MyMeetingsScreen extends StatefulWidget {
 class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
   @override
   Widget build(BuildContext context) {
+    UserModel userModel =
+        Provider.of<UserProvider>(context, listen: false).getUser;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -30,8 +35,11 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: StreamBuilder(
-            stream:
-                FirebaseFirestore.instance.collection('Meetings').snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection('Meetings')
+                .where("clientName",
+                    isEqualTo: "${userModel.firstName} ${userModel.lastName}")
+                .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -40,11 +48,12 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const Center(child: Text('No lawyerModels found'));
+                return const Center(child: Text('No Meetings found'));
               }
               return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
+                    print("hiiiiiiiiii: ${snapshot.data!.docs.length}");
                     var meetingData = snapshot.data!.docs[index].data();
                     return GestureDetector(
                       onTap: () {

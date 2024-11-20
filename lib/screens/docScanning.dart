@@ -1,11 +1,16 @@
 import 'dart:io';
 
+import 'package:adhikar2_o/models/userModel.dart';
+import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class DocumentScanning extends StatefulWidget {
   const DocumentScanning({super.key});
@@ -21,6 +26,8 @@ class _DocumentScanningState extends State<DocumentScanning> {
   final gemini = Gemini.instance;
   String res = '';
   final ImagePicker imagePicker = ImagePicker();
+    FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   getImage(ImageSource ourSource) async {
     XFile? result = await imagePicker.pickImage(source: ourSource);
@@ -50,6 +57,8 @@ class _DocumentScanningState extends State<DocumentScanning> {
   }
 
   void docSummary() async {
+     UserModel userModel =
+        Provider.of<UserProvider>(context, listen: false).getUser;
     await getImage(ImageSource.gallery);
     setState(() {
       scanning = true;
@@ -57,9 +66,22 @@ class _DocumentScanningState extends State<DocumentScanning> {
     gemini
         .text(
             "$myText this is a legal document. using complete legal language and easy to understand summarise in short this legal document.")
-        .then((value) => setState(() {
+        .then((value)async { setState(() {
               res = value!.output.toString();
-            }))
+            });
+            await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot userDoc = await transaction.get(
+            FirebaseFirestore.instance.collection("Users").doc(userModel.uid));
+
+        double currentCredits = userDoc["credits"] ?? 0;
+        double newCredits = (currentCredits - 2).clamp(0, currentCredits);
+
+        transaction.update(
+            FirebaseFirestore.instance.collection("Users").doc(userModel.uid),
+            {"credits": newCredits});
+      });
+        }
+            )
         .catchError((e) => print(e));
 
     setState(() {
@@ -69,6 +91,7 @@ class _DocumentScanningState extends State<DocumentScanning> {
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -92,9 +115,33 @@ class _DocumentScanningState extends State<DocumentScanning> {
                 const SizedBox(
                   width: 5,
                 ),
-                const Text(
-                  '48 credits',
-                  style: TextStyle(color: Colors.white, fontSize: 17),
+                 StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("Users")
+                      .doc(_auth.currentUser!.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+
+                    if (!snapshot.hasData || !snapshot.data!.exists) {
+                      return const Text('No Data');
+                    }
+
+                    // Fetch credits from Firestore document
+                    var currentCredits = snapshot.data!['credits'].toString() ?? 0;
+
+                    return Text(
+                      '$currentCredits credits',  // Display current credits
+                      style: const TextStyle(color: Colors.white, fontSize: 17),
+                    );
+                    
+                  },
                 ),
               ],
             ),

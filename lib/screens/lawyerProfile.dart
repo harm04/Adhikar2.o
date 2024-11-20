@@ -8,21 +8,26 @@ import 'package:flutter/services.dart';
 
 class LawyerProfileScreen extends StatefulWidget {
   final String profilePic;
-  final String lawyerName;
+  final String firstName;
+  final String lastName;
+  final String uid;
   final String location;
   final String ratings;
   final String caseWon;
   final String fees;
+  final String profImage;
   final String experience;
   const LawyerProfileScreen(
       {super.key,
       required this.profilePic,
-      required this.lawyerName,
       required this.location,
       required this.ratings,
       required this.caseWon,
       required this.fees,
-      required this.experience});
+      required this.experience,
+      required this.firstName,
+      required this.lastName,
+      required this.uid, required this.profImage});
 
   @override
   State<LawyerProfileScreen> createState() => _LawyerProfileScreenState();
@@ -69,7 +74,7 @@ class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.lawyerName,
+              "${widget.firstName} ${widget.lastName}",
               style: const TextStyle(color: Colors.white),
             ),
             Row(
@@ -303,7 +308,7 @@ class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: Text(
-                  'About ${widget.lawyerName}',
+                  'About ${widget.firstName} ${widget.lastName}',
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
@@ -411,6 +416,10 @@ class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
                         return _auth.currentUser == null
                             ? const LoginScreen()
                             : ConfirmConsultation(
+                              profImage: widget.profImage,
+                              firstName: widget.firstName,
+                              lastName:   widget.lastName,
+                              uid: widget.uid,
                                 amount: widget.fees,
                                 date:
                                     '${_dateTime.day.toString()}/${_dateTime.month.toString()}/${_dateTime.year.toString()}',

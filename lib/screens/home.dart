@@ -4,9 +4,7 @@ import 'package:adhikar2_o/screens/aiServices.dart';
 import 'package:adhikar2_o/screens/applyForLawyerScreen.dart';
 import 'package:adhikar2_o/screens/auth/loginScreen.dart';
 import 'package:adhikar2_o/screens/auth/siginScreen.dart';
-import 'package:adhikar2_o/screens/drawerScreens/emergencyScreen.dart';
-import 'package:adhikar2_o/screens/drawerScreens/filters.dart';
-import 'package:adhikar2_o/screens/drawerScreens/forms.dart';
+
 import 'package:adhikar2_o/screens/verfificationPendingScreen.dart';
 import 'package:adhikar2_o/services/authServices.dart';
 import 'package:adhikar2_o/utils/colors.dart';
@@ -133,51 +131,51 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.only(left: 35.0),
                       child: Column(
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return const FiltersScreen();
-                              }));
-                            },
-                            child: const DrawerItems(
-                                image: 'assets/icons/ic_filter.png',
-                                name: 'Filter'),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const DrawerItems(
-                                image: 'assets/icons/ic_fines.png',
-                                name: 'Fines'),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Navigator.push(context,
+                          //         MaterialPageRoute(builder: (context) {
+                          //       return const FiltersScreen();
+                          //     }));
+                          //   },
+                          //   child: const DrawerItems(
+                          //       image: 'assets/icons/ic_filter.png',
+                          //       name: 'Filter'),
+                          // ),
+                          // GestureDetector(
+                          //   onTap: () {},
+                          //   child: const DrawerItems(
+                          //       image: 'assets/icons/ic_fines.png',
+                          //       name: 'Fines'),
+                          // ),
                           GestureDetector(
                             onTap: () {},
                             child: const DrawerItems(
                                 image: 'assets/icons/ic_contact_us.png',
                                 name: 'Contact us'),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return const FormsScreen();
-                              }));
-                            },
-                            child: const DrawerItems(
-                                image: 'assets/icons/ic_forms.png',
-                                name: 'Forms'),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return const EmergencyScreen();
-                              }));
-                            },
-                            child: const DrawerItems(
-                                image: 'assets/icons/ic_emergency.png',
-                                name: 'Emergency'),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Navigator.push(context,
+                          //         MaterialPageRoute(builder: (context) {
+                          //       return const FormsScreen();
+                          //     }));
+                          //   },
+                          //   child: const DrawerItems(
+                          //       image: 'assets/icons/ic_forms.png',
+                          //       name: 'Forms'),
+                          // ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Navigator.push(context,
+                          //         MaterialPageRoute(builder: (context) {
+                          //       return const EmergencyScreen();
+                          //     }));
+                          //   },
+                          //   child: const DrawerItems(
+                          //       image: 'assets/icons/ic_emergency.png',
+                          //       name: 'Emergency'),
+                          // ),
                           GestureDetector(
                             onTap: () {},
                             child: const DrawerItems(

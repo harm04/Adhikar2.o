@@ -19,12 +19,13 @@ class _AIServicesState extends State<AIServices> {
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
-    
 
     return _auth.currentUser == null
         ? AlertDialog(
             title: const Text(
-                'It seems you are not authenticated..!\nTo access AI services you need to signup',style: TextStyle(color: Colors.black,fontSize: 18),),
+              'It seems you are not authenticated..!\nTo access AI services you need to signup',
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
             actions: [
               TextButton(
                   onPressed: () {

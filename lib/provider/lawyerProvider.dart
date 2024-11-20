@@ -7,7 +7,7 @@ class LawyerProvider with ChangeNotifier {
   LawyerModel get getLawyer => _lawyermodel!;
 
   Future<void> refreshLawyer() async {
-    LawyerModel lawyermodel = await AuthServices().getLawyerDetals();
+    LawyerModel? lawyermodel = await AuthServices().getLawyerDetals();
     _lawyermodel = lawyermodel;
     notifyListeners();
   }
