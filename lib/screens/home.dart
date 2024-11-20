@@ -11,6 +11,7 @@ import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/drawerItems.dart';
 import 'package:adhikar2_o/widgets/homeLaw.dart';
 import 'package:adhikar2_o/widgets/judgement.dart';
+import 'package:adhikar2_o/widgets/ratingsDialoug.dart';
 import 'package:adhikar2_o/widgets/viewAllCard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
 // navigate to ai services
   void navigateToAIServices() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AIServices();
+      return const AIServices();
     }));
   }
 
@@ -128,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 35.0),
+                      padding: const EdgeInsets.only(left: 35.0),
                       child: Column(
                         children: [
                           // GestureDetector(
@@ -244,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       AuthServices().logout();
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) {
-                        return LoginScreen();
+                        return const LoginScreen();
                       }));
                     },
                     child: SizedBox(
