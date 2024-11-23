@@ -165,92 +165,167 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(
                 height: 30,
               ),
-              CustomTextField(
-                controller: nameController,
-                hinttext: 'Enter your name',
-                keyboardType: TextInputType.text,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.email),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Email',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(userModel.email,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey))
+                ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              CustomTextField(
-                  controller: phoneController,
-                  hinttext: 'Enter your phone',
-                  keyboardType: TextInputType.phone),
-              const SizedBox(
-                height: 10,
-              ),
-              CustomTextField(
-                  controller: emailController,
-                  hinttext: 'Enter your email',
-                  keyboardType: TextInputType.emailAddress),
               const SizedBox(
                 height: 10,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: DropDownField(
-                      enabled: true,
-                      textStyle:
-                          const TextStyle(color: Colors.black, fontSize: 16),
-                      controller: statecontroller,
-                      hintText: 'Select your State',
-                      hintStyle:
-                          const TextStyle(color: Colors.grey, fontSize: 14),
-                      items: states,
-                      itemsVisibleInDropdown: 5,
-                      onValueChanged: (value) {
-                        setState(() {
-                          statecontroller.text = value;
-                        });
-                      },
-                    ),
+                  const Row(
+                    children: [
+                      Icon(Icons.person),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Type',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: Text(
-                      "*",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropDownField(
-                      enabled: true,
-                      textStyle:
-                          const TextStyle(color: Colors.black, fontSize: 16),
-                      controller: rolecontroller,
-                      hintText: 'Select your Role',
-                      hintStyle:
-                          const TextStyle(color: Colors.grey, fontSize: 14),
-                      items: role,
-                      itemsVisibleInDropdown: 3,
-                      onValueChanged: (value) {
-                        setState(() {
-                          rolecontroller.text = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: Text(
-                      "*",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  )
+                  Text(userModel.type,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey))
                 ],
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
-              const CustomButton(
-                text: 'Finish',
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.password),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Password',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text('******',
+                      style: TextStyle(fontSize: 14, color: Colors.grey))
+                ],
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              // CustomTextField(
+              //   controller: nameController,
+              //   hinttext: 'Enter your name',
+              //   keyboardType: TextInputType.text,
+              // ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // CustomTextField(
+              //     controller: phoneController,
+              //     hinttext: 'Enter your phone',
+              //     keyboardType: TextInputType.phone),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // CustomTextField(
+              //     controller: emailController,
+              //     hinttext: 'Enter your email',
+              //     keyboardType: TextInputType.emailAddress),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: DropDownField(
+              //         enabled: true,
+              //         textStyle:
+              //             const TextStyle(color: Colors.black, fontSize: 16),
+              //         controller: statecontroller,
+              //         hintText: 'Select your State',
+              //         hintStyle:
+              //             const TextStyle(color: Colors.grey, fontSize: 14),
+              //         items: states,
+              //         itemsVisibleInDropdown: 5,
+              //         onValueChanged: (value) {
+              //           setState(() {
+              //             statecontroller.text = value;
+              //           });
+              //         },
+              //       ),
+              //     ),
+              //     const Padding(
+              //       padding: EdgeInsets.only(right: 16.0),
+              //       child: Text(
+              //         "*",
+              //         style: TextStyle(color: Colors.red),
+              //       ),
+              //     )
+              //   ],
+              // ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: DropDownField(
+              //         enabled: true,
+              //         textStyle:
+              //             const TextStyle(color: Colors.black, fontSize: 16),
+              //         controller: rolecontroller,
+              //         hintText: 'Select your Role',
+              //         hintStyle:
+              //             const TextStyle(color: Colors.grey, fontSize: 14),
+              //         items: role,
+              //         itemsVisibleInDropdown: 3,
+              //         onValueChanged: (value) {
+              //           setState(() {
+              //             rolecontroller.text = value;
+              //           });
+              //         },
+              //       ),
+              //     ),
+              //     const Padding(
+              //       padding: EdgeInsets.only(right: 16.0),
+              //       child: Text(
+              //         "*",
+              //         style: TextStyle(color: Colors.red),
+              //       ),
+              //     )
+              //   ],
+              // ),
+              // const SizedBox(
+              //   height: 20,
+              // ),
+              // const CustomButton(
+              //   text: 'Finish',
+              // ),
               const SizedBox(
                 height: 30,
               ),

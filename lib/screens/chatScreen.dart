@@ -162,7 +162,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     }
 
                     // Fetch credits from Firestore document
-                    var currentCredits = snapshot.data!['credits'].toString() ?? 0;
+                    var currentCredits = snapshot.data!['credits'].toString();
 
                     return Text(
                       '$currentCredits credits',  // Display current credits

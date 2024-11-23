@@ -1,10 +1,13 @@
 import 'dart:math';
 
 import 'package:adhikar2_o/utils/colors.dart';
+import 'package:adhikar2_o/utils/snackbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RaitngsDialoug extends StatefulWidget {
-  const RaitngsDialoug({super.key});
+  final String callID;
+  const RaitngsDialoug({super.key, required this.callID});
 
   @override
   State<RaitngsDialoug> createState() => _RaitngsDialougState();
@@ -21,7 +24,7 @@ class _RaitngsDialougState extends State<RaitngsDialoug> {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
-          Container(
+          SizedBox(
             height: max(300, MediaQuery.of(context).size.height * 0.3),
             child: PageView(
               controller: _ratingPageController,
@@ -40,6 +43,14 @@ class _RaitngsDialougState extends State<RaitngsDialoug> {
                 color: primaryColor,
                 child: MaterialButton(
                   onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection("Meetings")
+                        .doc(widget.callID)
+                        .update({
+                      "ratings": _rating,
+                    });
+                    showSnackbar(
+                        context, 'Thank you for rating adhikar lawyer');
                     Navigator.pop(context);
                     print(_rating);
                   },

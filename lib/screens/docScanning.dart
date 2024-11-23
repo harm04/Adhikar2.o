@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:adhikar2_o/models/userModel.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/utils/colors.dart';
+import 'package:adhikar2_o/utils/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +27,7 @@ class _DocumentScanningState extends State<DocumentScanning> {
   final gemini = Gemini.instance;
   String res = '';
   final ImagePicker imagePicker = ImagePicker();
-    FirebaseAuth _auth = FirebaseAuth.instance;
-
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   getImage(ImageSource ourSource) async {
     XFile? result = await imagePicker.pickImage(source: ourSource);
@@ -57,7 +57,7 @@ class _DocumentScanningState extends State<DocumentScanning> {
   }
 
   void docSummary() async {
-     UserModel userModel =
+    UserModel userModel =
         Provider.of<UserProvider>(context, listen: false).getUser;
     await getImage(ImageSource.gallery);
     setState(() {
@@ -66,10 +66,11 @@ class _DocumentScanningState extends State<DocumentScanning> {
     gemini
         .text(
             "$myText this is a legal document. using complete legal language and easy to understand summarise in short this legal document.")
-        .then((value)async { setState(() {
-              res = value!.output.toString();
-            });
-            await FirebaseFirestore.instance.runTransaction((transaction) async {
+        .then((value) async {
+      setState(() {
+        res = value!.output.toString();
+      });
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot userDoc = await transaction.get(
             FirebaseFirestore.instance.collection("Users").doc(userModel.uid));
 
@@ -80,9 +81,9 @@ class _DocumentScanningState extends State<DocumentScanning> {
             FirebaseFirestore.instance.collection("Users").doc(userModel.uid),
             {"credits": newCredits});
       });
-        }
-            )
-        .catchError((e) => print(e));
+    }).catchError((e) {
+      showSnackbar(context, e.toString());
+    });
 
     setState(() {
       scanning = false;
@@ -91,7 +92,6 @@ class _DocumentScanningState extends State<DocumentScanning> {
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -115,7 +115,7 @@ class _DocumentScanningState extends State<DocumentScanning> {
                 const SizedBox(
                   width: 5,
                 ),
-                 StreamBuilder<DocumentSnapshot>(
+                StreamBuilder<DocumentSnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection("Users")
                       .doc(_auth.currentUser!.uid)
@@ -134,13 +134,13 @@ class _DocumentScanningState extends State<DocumentScanning> {
                     }
 
                     // Fetch credits from Firestore document
-                    var currentCredits = snapshot.data!['credits'].toString() ?? 0;
+                    var currentCredits =
+                        snapshot.data!['credits'].toString();
 
                     return Text(
-                      '$currentCredits credits',  // Display current credits
+                      '$currentCredits credits', // Display current credits
                       style: const TextStyle(color: Colors.white, fontSize: 17),
                     );
-                    
                   },
                 ),
               ],

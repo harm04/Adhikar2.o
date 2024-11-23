@@ -1,8 +1,11 @@
+import 'package:adhikar2_o/models/lawyerModel.dart';
 import 'package:adhikar2_o/models/userModel.dart';
+import 'package:adhikar2_o/provider/lawyerProvider.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/screens/videoCallScreen.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/meetingCard.dart';
+import 'package:adhikar2_o/widgets/ratingsDialoug.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +23,9 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
   Widget build(BuildContext context) {
     UserModel userModel =
         Provider.of<UserProvider>(context, listen: false).getUser;
+    // LawyerModel lawyerModel =
+    //             Provider.of<LawyerProvider>(context, listen: false)
+    //                 .getLawyer;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -35,11 +41,19 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('Meetings')
-                .where("clientName",
-                    isEqualTo: "${userModel.firstName} ${userModel.lastName}")
-                .snapshots(),
+            stream: userModel.type == 'User'
+                ? FirebaseFirestore.instance
+                    .collection('Meetings')
+                    .where("clientName",
+                        isEqualTo:
+                            "${userModel.firstName} ${userModel.lastName}")
+                    .snapshots()
+                : FirebaseFirestore.instance
+                    .collection('Meetings')
+                    .where("lawyerName",
+                        isEqualTo:
+                            "${userModel.firstName} ${userModel.lastName}")
+                    .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -53,7 +67,6 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
               return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    print("hiiiiiiiiii: ${snapshot.data!.docs.length}");
                     var meetingData = snapshot.data!.docs[index].data();
                     return GestureDetector(
                       onTap: () {
@@ -64,7 +77,16 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
                                   callID: meetingData['meetingUid'],
                                 );
                               }))
-                            : SizedBox();
+                            : showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    child: RaitngsDialoug(
+                                      callID: meetingData['meetingUid'],
+                                    ),
+                                  );
+                                });
+                        ;
                       },
 
                       //if we want all meetings to be visible in my meetings section then just change meetinguid to a random uid

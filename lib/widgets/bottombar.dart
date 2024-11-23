@@ -30,7 +30,7 @@ class _BottomBarState extends State<BottomBar> {
     // const Center(child: Text("page2()")),
     // const Center(child: Text(" LawScreen()")),
     const Center(child: MarketPlaceScreen()),
-    const Center(child: ProfileScreen())
+     Center(child: ProfileScreen())
   ];
 
   @override

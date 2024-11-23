@@ -13,8 +13,7 @@ class VideoCallScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userId = Random().nextInt(10000);
-    // UserModel userModel =
-    //     Provider.of<UserProvider>(context, listen: false).getUser;
+
     return ZegoUIKitPrebuiltCall(
       appID: appId,
       appSign: appSign,
@@ -23,22 +22,11 @@ class VideoCallScreen extends StatelessWidget {
       callID: callID,
       config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(),
       onDispose: () async {
-        await openRatingDialoug(context);
         await FirebaseFirestore.instance
             .collection('Meetings')
             .doc(callID)
             .update({'status': 'completed;'});
       },
     );
-  }
-
-  openRatingDialoug(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: RaitngsDialoug(),
-          );
-        });
   }
 }

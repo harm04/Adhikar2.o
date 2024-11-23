@@ -25,7 +25,8 @@ class ConfirmConsultation extends StatefulWidget {
       required this.amount,
       required this.uid,
       required this.firstName,
-      required this.lastName, required this.profImage});
+      required this.lastName,
+      required this.profImage});
 
   @override
   State<ConfirmConsultation> createState() => _ConfirmConsultationState();
@@ -240,7 +241,7 @@ class _ConfirmConsultationState extends State<ConfirmConsultation> {
 
                   //if we want all meetings to be visible in my meetings section then just change meetinguid to a random uid
                   String meetingUid =
-                      '${widget.uid.substring(widget.uid.length - 5)}${widget.uid.substring(widget.uid.length - 5)}';
+                      '${userModel.uid.substring(userModel.uid.length - 5)}${widget.uid.substring(widget.uid.length - 5)}';
                   openCheckout(
                       razorpayAmount.toString(),
                       'Random',
@@ -261,7 +262,8 @@ class _ConfirmConsultationState extends State<ConfirmConsultation> {
                     "time": widget.time,
                     "date": widget.date,
                     "status": "pending",
-                    "profImage":widget.profImage
+                    "profImage": widget.profImage,
+                    "ratings": 3,
                   });
 
                   //adding meeting uid in user collection

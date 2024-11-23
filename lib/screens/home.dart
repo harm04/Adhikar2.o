@@ -4,7 +4,6 @@ import 'package:adhikar2_o/screens/aiServices.dart';
 import 'package:adhikar2_o/screens/applyForLawyerScreen.dart';
 import 'package:adhikar2_o/screens/auth/loginScreen.dart';
 import 'package:adhikar2_o/screens/auth/siginScreen.dart';
-
 import 'package:adhikar2_o/screens/verfificationPendingScreen.dart';
 import 'package:adhikar2_o/services/authServices.dart';
 import 'package:adhikar2_o/utils/colors.dart';
@@ -333,7 +332,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  navigateToAIServices();
+                  // navigateToAIServices();
+                  openRatingDialoug(context);
                 },
                 child: CircleAvatar(
                   radius: 22,
@@ -429,5 +429,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  openRatingDialoug(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: RaitngsDialoug(
+              callID: 'jZDh1fiya2',
+            ),
+          );
+        });
   }
 }
