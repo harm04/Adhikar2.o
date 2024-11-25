@@ -2,11 +2,11 @@ import 'package:adhikar2_o/models/userModel.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/screens/auth/loginScreen.dart';
 import 'package:adhikar2_o/screens/auth/siginScreen.dart';
-import 'package:adhikar2_o/screens/myMeetings.dart';
+import 'package:adhikar2_o/screens/helpAndSupport.dart';
+import 'package:adhikar2_o/screens/privacy.dart';
+import 'package:adhikar2_o/screens/security.dart';
+import 'package:adhikar2_o/services/authServices.dart';
 import 'package:adhikar2_o/utils/colors.dart';
-import 'package:adhikar2_o/widgets/customButton.dart';
-import 'package:adhikar2_o/widgets/customTextfield.dart';
-import 'package:dropdownfield2/dropdownfield2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -120,227 +120,196 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 20,
               ),
-              const Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 70,
-                    backgroundColor: Colors.black,
-                    child: CircleAvatar(
-                      radius: 66,
-                      backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(
-                        'https://image.cdn2.seaart.me/2024-09-16/crjon2de878c739kmukg-2/363d4f7dce80aad62b4b1cdc12bb1ec6_high.webp',
+              const Center(
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Colors.black,
+                      child: CircleAvatar(
+                        radius: 66,
+                        backgroundColor: Colors.white,
+                        backgroundImage: NetworkImage(
+                          'https://image.cdn2.seaart.me/2024-09-16/crjon2de878c739kmukg-2/363d4f7dce80aad62b4b1cdc12bb1ec6_high.webp',
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                      bottom: -0,
-                      right: 10,
-                      child: CircleAvatar(
-                        radius: 16,
-                        backgroundColor: Colors.black,
+                    Positioned(
+                        bottom: -0,
+                        right: 10,
                         child: CircleAvatar(
-                            radius: 15,
-                            backgroundColor: Colors.white,
-                            child: Icon(
-                              Icons.edit,
-                              size: 20,
-                              color: Colors.grey,
-                            )),
-                      ))
-                ],
+                          radius: 16,
+                          backgroundColor: Colors.black,
+                          child: CircleAvatar(
+                              radius: 15,
+                              backgroundColor: Colors.white,
+                              child: Icon(
+                                Icons.edit,
+                                size: 20,
+                                color: Colors.grey,
+                              )),
+                        ))
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Text(
+                  '${userModel.firstName} ${userModel.lastName}',
+                  style: const TextStyle(color: Colors.black, fontSize: 20),
+                ),
               ),
               const SizedBox(
                 height: 30,
               ),
-              Text(
-                '${userModel.firstName} ${userModel.lastName}',
-                style: const TextStyle(color: Colors.black, fontSize: 20),
+              const Text(
+                'Account',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color.fromARGB(255, 240, 240, 240)),
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const PrivacyPage();
+                            }));
+                          },
+                          child: iconAndTextRow(
+                              'Privacy', 'assets/icons/ic_privacy.png')),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const SecurityPage();
+                            }));
+                          },
+                          child: iconAndTextRow(
+                              'Security', 'assets/icons/ic_security.png')),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 30,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.email),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Email',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(userModel.email,
-                      style: const TextStyle(fontSize: 14, color: Colors.grey))
-                ],
+              const Text(
+                'Support',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Row(
+              Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color.fromARGB(255, 240, 240, 240)),
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
                     children: [
-                      Icon(Icons.person),
-                      SizedBox(
-                        width: 10,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return const HelpAndSupport();
+                          }));
+                        },
+                        child: iconAndTextRow(
+                            'Help and Support', 'assets/icons/ic_help.png'),
                       ),
-                      Text(
-                        'Type',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      const SizedBox(
+                        height: 20,
                       ),
+                      iconAndTextRow(
+                          'Terms and Policies', 'assets/icons/ic_terms.png'),
                     ],
                   ),
-                  Text(userModel.type,
-                      style: const TextStyle(fontSize: 14, color: Colors.grey))
-                ],
+                ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.password),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Password',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text('******',
-                      style: TextStyle(fontSize: 14, color: Colors.grey))
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              // CustomTextField(
-              //   controller: nameController,
-              //   hinttext: 'Enter your name',
-              //   keyboardType: TextInputType.text,
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // CustomTextField(
-              //     controller: phoneController,
-              //     hinttext: 'Enter your phone',
-              //     keyboardType: TextInputType.phone),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // CustomTextField(
-              //     controller: emailController,
-              //     hinttext: 'Enter your email',
-              //     keyboardType: TextInputType.emailAddress),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: DropDownField(
-              //         enabled: true,
-              //         textStyle:
-              //             const TextStyle(color: Colors.black, fontSize: 16),
-              //         controller: statecontroller,
-              //         hintText: 'Select your State',
-              //         hintStyle:
-              //             const TextStyle(color: Colors.grey, fontSize: 14),
-              //         items: states,
-              //         itemsVisibleInDropdown: 5,
-              //         onValueChanged: (value) {
-              //           setState(() {
-              //             statecontroller.text = value;
-              //           });
-              //         },
-              //       ),
-              //     ),
-              //     const Padding(
-              //       padding: EdgeInsets.only(right: 16.0),
-              //       child: Text(
-              //         "*",
-              //         style: TextStyle(color: Colors.red),
-              //       ),
-              //     )
-              //   ],
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: DropDownField(
-              //         enabled: true,
-              //         textStyle:
-              //             const TextStyle(color: Colors.black, fontSize: 16),
-              //         controller: rolecontroller,
-              //         hintText: 'Select your Role',
-              //         hintStyle:
-              //             const TextStyle(color: Colors.grey, fontSize: 14),
-              //         items: role,
-              //         itemsVisibleInDropdown: 3,
-              //         onValueChanged: (value) {
-              //           setState(() {
-              //             rolecontroller.text = value;
-              //           });
-              //         },
-              //       ),
-              //     ),
-              //     const Padding(
-              //       padding: EdgeInsets.only(right: 16.0),
-              //       child: Text(
-              //         "*",
-              //         style: TextStyle(color: Colors.red),
-              //       ),
-              //     )
-              //   ],
-              // ),
-              // const SizedBox(
-              //   height: 20,
-              // ),
-              // const CustomButton(
-              //   text: 'Finish',
-              // ),
               const SizedBox(
                 height: 30,
               ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const MyMeetingsScreen();
-                    }));
-                  },
-                  child: const Text('My meetings'))
+              const Text(
+                'Actions',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color.fromARGB(255, 240, 240, 240)),
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
+                    children: [
+                      iconAndTextRow('Report', 'assets/icons/ic_report.png'),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            AuthServices().logout();
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const LoginScreen();
+                            }));
+                          },
+                          child: iconAndTextRow(
+                              'Logout', 'assets/icons/ic_logout.png')),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget iconAndTextRow(text, icon) {
+    return Row(
+      children: [
+        Image.asset(
+          icon,
+          height: 20,
+        ),
+        const SizedBox(
+          width: 15,
+        ),
+        Text(
+          text,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        ),
+      ],
     );
   }
 }

@@ -4,13 +4,12 @@ import 'package:adhikar2_o/screens/aiServices.dart';
 import 'package:adhikar2_o/screens/applyForLawyerScreen.dart';
 import 'package:adhikar2_o/screens/auth/loginScreen.dart';
 import 'package:adhikar2_o/screens/auth/siginScreen.dart';
+import 'package:adhikar2_o/screens/myMeetings.dart';
 import 'package:adhikar2_o/screens/verfificationPendingScreen.dart';
-import 'package:adhikar2_o/services/authServices.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/drawerItems.dart';
 import 'package:adhikar2_o/widgets/homeLaw.dart';
 import 'package:adhikar2_o/widgets/judgement.dart';
-import 'package:adhikar2_o/widgets/ratingsDialoug.dart';
 import 'package:adhikar2_o/widgets/viewAllCard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -72,8 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
-    // LawyerModel lawyerModel = Provider.of<LawyerProvider>(context).getLawyer;
-
     return Scaffold(
       drawerScrimColor: Colors.transparent,
       drawer: Drawer(
@@ -85,44 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const SizedBox(
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundColor: primaryColor,
-                          child: CircleAvatar(
-                            radius: 38,
-                            backgroundColor: Colors.white,
-                            backgroundImage: NetworkImage(
-                              'https://image.cdn2.seaart.me/2024-09-16/crjon2de878c739kmukg-2/363d4f7dce80aad62b4b1cdc12bb1ec6_high.webp',
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'username',
-                              style:
-                                  TextStyle(color: primaryColor, fontSize: 23),
-                            ),
-                            Text(
-                              'Student',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 16),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.1,
                   ),
@@ -131,51 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.only(left: 35.0),
                       child: Column(
                         children: [
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Navigator.push(context,
-                          //         MaterialPageRoute(builder: (context) {
-                          //       return const FiltersScreen();
-                          //     }));
-                          //   },
-                          //   child: const DrawerItems(
-                          //       image: 'assets/icons/ic_filter.png',
-                          //       name: 'Filter'),
-                          // ),
-                          // GestureDetector(
-                          //   onTap: () {},
-                          //   child: const DrawerItems(
-                          //       image: 'assets/icons/ic_fines.png',
-                          //       name: 'Fines'),
-                          // ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const DrawerItems(
-                                image: 'assets/icons/ic_contact_us.png',
-                                name: 'Contact us'),
-                          ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Navigator.push(context,
-                          //         MaterialPageRoute(builder: (context) {
-                          //       return const FormsScreen();
-                          //     }));
-                          //   },
-                          //   child: const DrawerItems(
-                          //       image: 'assets/icons/ic_forms.png',
-                          //       name: 'Forms'),
-                          // ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Navigator.push(context,
-                          //         MaterialPageRoute(builder: (context) {
-                          //       return const EmergencyScreen();
-                          //     }));
-                          //   },
-                          //   child: const DrawerItems(
-                          //       image: 'assets/icons/ic_emergency.png',
-                          //       name: 'Emergency'),
-                          // ),
                           GestureDetector(
                             onTap: () {},
                             child: const DrawerItems(
@@ -232,43 +146,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 image: 'assets/icons/ic_lawyer.png',
                                 name: 'Apply for Adhikar Lawyer'),
                           ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return const MyMeetingsScreen();
+                              }));
+                            },
+                            child: const DrawerItems(
+                                image: 'assets/icons/ic_bag.png',
+                                name: 'My meetings'),
+                          )
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      AuthServices().logout();
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const LoginScreen();
-                      }));
-                    },
-                    child: SizedBox(
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/icons/ic_logout.png',
-                            height: 20,
-                            color: primaryColor,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Text(
-                            'Logout',
-                            style: TextStyle(
-                                color: primaryColor,
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
@@ -330,21 +222,32 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 width: 10,
               ),
-              GestureDetector(
-                onTap: () {
-                  // navigateToAIServices();
-                  openRatingDialoug(context);
-                },
-                child: CircleAvatar(
-                  radius: 22,
-                  backgroundColor: primaryColor,
-                  child: CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Colors.white,
-                    child: Image.asset('assets/icons/ic_chatbot.png'),
-                  ),
-                ),
-              ),
+              _auth.currentUser == null
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const LoginScreen();
+                        }));
+                      },
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ))
+                  : GestureDetector(
+                      onTap: () {
+                        navigateToAIServices();
+                      },
+                      child: CircleAvatar(
+                        radius: 22,
+                        backgroundColor: primaryColor,
+                        child: CircleAvatar(
+                          radius: 18,
+                          backgroundColor: Colors.white,
+                          child: Image.asset('assets/icons/ic_chatbot.png'),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),
@@ -429,17 +332,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  openRatingDialoug(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: RaitngsDialoug(
-              callID: 'jZDh1fiya2',
-            ),
-          );
-        });
   }
 }

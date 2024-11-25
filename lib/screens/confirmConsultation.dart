@@ -264,6 +264,7 @@ class _ConfirmConsultationState extends State<ConfirmConsultation> {
                     "status": "pending",
                     "profImage": widget.profImage,
                     "ratings": 3,
+                    
                   });
 
                   //adding meeting uid in user collection

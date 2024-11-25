@@ -55,10 +55,7 @@ class MyApp extends StatelessWidget {
             } else {
               return const BottomBar();
             }
-          })
-
-          // home: LoginScreen(),
-          ),
+          })),
     );
   }
 }

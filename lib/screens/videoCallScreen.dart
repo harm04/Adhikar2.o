@@ -1,7 +1,5 @@
 import 'dart:math';
-
 import 'package:adhikar2_o/utils/constants.dart';
-import 'package:adhikar2_o/widgets/ratingsDialoug.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';

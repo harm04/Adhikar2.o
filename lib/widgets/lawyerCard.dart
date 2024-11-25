@@ -1,3 +1,5 @@
+import 'package:adhikar2_o/utils/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class LawyerCard extends StatelessWidget {
@@ -25,15 +27,33 @@ class LawyerCard extends StatelessWidget {
         height: 100,
         child: Row(
           children: [
+            // Container(
+              // width: 90,
+              // height: 90,
+            //   clipBehavior: Clip.antiAlias,
+            //   decoration:
+            //       BoxDecoration(borderRadius: BorderRadius.circular(15)),
+            //   //
+            //   child: Image.network(
+            //     profilePic,
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
+
             Container(
               width: 90,
               height: 90,
-              clipBehavior: Clip.antiAlias,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
-              //
-              child: Image.network(
-                profilePic,
+              decoration:  BoxDecoration(color: primaryColor,borderRadius: BorderRadius.circular(15)),
+              child: CachedNetworkImage(
+                
+                imageUrl: profilePic,
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => Image.network(
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGkAznCVTAALTD1o2mAnGLudN9r-bY6klRFB35J2hY7gvR9vDO3bPY_6gaOrfV0IHEIUo&usqp=CAU',
+                    fit: BoxFit.cover),
+                height: 70,
+                width: 70,
                 fit: BoxFit.cover,
               ),
             ),

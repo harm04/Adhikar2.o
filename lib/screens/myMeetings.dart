@@ -1,6 +1,4 @@
-import 'package:adhikar2_o/models/lawyerModel.dart';
 import 'package:adhikar2_o/models/userModel.dart';
-import 'package:adhikar2_o/provider/lawyerProvider.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/screens/videoCallScreen.dart';
 import 'package:adhikar2_o/utils/colors.dart';
@@ -77,15 +75,17 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
                                   callID: meetingData['meetingUid'],
                                 );
                               }))
-                            : showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Dialog(
-                                    child: RaitngsDialoug(
-                                      callID: meetingData['meetingUid'],
-                                    ),
-                                  );
-                                });
+                            : meetingData['ratings'] == ""
+                                ? showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        child: RaitngsDialoug(
+                                          callID: meetingData['meetingUid'],
+                                        ),
+                                      );
+                                    })
+                                : const SizedBox();
                         ;
                       },
 
