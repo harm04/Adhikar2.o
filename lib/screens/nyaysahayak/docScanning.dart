@@ -1,10 +1,10 @@
 import 'dart:io';
-
 import 'package:adhikar2_o/models/userModel.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/utils/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdownfield2/dropdownfield2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +27,26 @@ class _DocumentScanningState extends State<DocumentScanning> {
   final gemini = Gemini.instance;
   String res = '';
   final ImagePicker imagePicker = ImagePicker();
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  TextEditingController languagecontroller = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
+    languagecontroller.dispose();
+  }
+
+  final List<String> languages = [
+    "Hindi",
+    "Marathi",
+    "English",
+    "Bengali",
+    "Tamil",
+    "Telugu",
+    "Gujarati",
+    "Kannada",
+    "Malayalam",
+    "Punjabi",
+  ];
 
   getImage(ImageSource ourSource) async {
     XFile? result = await imagePicker.pickImage(source: ourSource);
@@ -52,6 +71,9 @@ class _DocumentScanningState extends State<DocumentScanning> {
         scanning = false;
       });
     } catch (e) {
+      setState(() {
+        scanning = false;
+      });
       print('Error during recognizing text');
     }
   }
@@ -63,12 +85,14 @@ class _DocumentScanningState extends State<DocumentScanning> {
     setState(() {
       scanning = true;
     });
+
     gemini
         .text(
-            "$myText this is a legal document. using complete legal language and easy to understand summarise in short this legal document.")
+            "$myText this is a legal document. using complete legal language and easy to understand explain in short this legal document in ${languagecontroller.text}.")
         .then((value) async {
       setState(() {
-        res = value!.output.toString();
+        // Process the response to replace '*' with ''
+        res = value!.output.toString().replaceAll('*', '');
       });
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot userDoc = await transaction.get(
@@ -122,7 +146,8 @@ class _DocumentScanningState extends State<DocumentScanning> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
+                      return const CircularProgressIndicator(
+                          color: primaryColor);
                     }
 
                     if (snapshot.hasError) {
@@ -134,8 +159,7 @@ class _DocumentScanningState extends State<DocumentScanning> {
                     }
 
                     // Fetch credits from Firestore document
-                    var currentCredits =
-                        snapshot.data!['credits'].toString();
+                    var currentCredits = snapshot.data!['credits'].toString();
 
                     return Text(
                       '$currentCredits credits', // Display current credits
@@ -153,9 +177,10 @@ class _DocumentScanningState extends State<DocumentScanning> {
           docSummary();
         },
         child: SizedBox(
-            height: 60,
+            height: 120,
             width: MediaQuery.of(context).size.width,
             child: const Card(
+              margin: EdgeInsets.symmetric(vertical: 30, horizontal: 18),
               elevation: 20,
               color: primaryColor,
               child: Center(
@@ -168,31 +193,61 @@ class _DocumentScanningState extends State<DocumentScanning> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: scanning
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : ListView(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    pickedImage != null
-                        ? SizedBox(
-                            height: 300,
-                            width: 500,
-                            child: Image.file(File(pickedImage!.path)),
-                          )
-                        : const SizedBox(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      res.toString(),
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                  ],
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: primaryColor)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: DropDownField(
+                    enabled: true,
+                    textStyle:
+                        const TextStyle(color: Colors.black, fontSize: 16),
+                    controller: languagecontroller,
+                    hintText: 'Select your language',
+                    hintStyle:
+                        const TextStyle(color: Colors.grey, fontSize: 14),
+                    items: languages,
+                    itemsVisibleInDropdown: 4,
+                    onValueChanged: (value) {
+                      setState(() {
+                        languagecontroller.text = value;
+                      });
+                    },
+                  ),
                 ),
+              ),
+              scanning
+                  ? const Center(
+                      child: CircularProgressIndicator(color: primaryColor),
+                    )
+                  : Expanded(
+                      child: ListView(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          pickedImage != null
+                              ? SizedBox(
+                                  height: 300,
+                                  width: 500,
+                                  child: Image.file(File(pickedImage!.path)),
+                                )
+                              : const SizedBox(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            res.toString(),
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:adhikar2_o/models/userModel.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
-import 'package:adhikar2_o/screens/verfificationPendingScreen.dart';
+import 'package:adhikar2_o/screens/admin/lawyerVerification/verfificationPendingScreen.dart';
 import 'package:adhikar2_o/services/applyForlawyerService.dart';
 import 'package:adhikar2_o/services/imagePckerServices.dart';
 import 'package:adhikar2_o/utils/colors.dart';
@@ -25,7 +25,6 @@ class _ApplyForLawyerScreenState extends State<ApplyForLawyerScreen> {
   TextEditingController statecontroller = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
-
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController dobController = TextEditingController();
@@ -35,6 +34,7 @@ class _ApplyForLawyerScreenState extends State<ApplyForLawyerScreen> {
   TextEditingController casesWonController = TextEditingController();
   TextEditingController experienceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  bool loading=false;
 
   @override
   void dispose() {
@@ -146,7 +146,7 @@ class _ApplyForLawyerScreenState extends State<ApplyForLawyerScreen> {
       ),
       body: isloading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: primaryColor  ,),
             )
           : Padding(
               padding: const EdgeInsets.all(18.0),

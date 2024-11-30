@@ -1,5 +1,6 @@
 import 'package:adhikar2_o/screens/auth/siginScreen.dart';
 import 'package:adhikar2_o/services/authServices.dart';
+import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/utils/snackbar.dart';
 import 'package:adhikar2_o/widgets/bottombar.dart';
 import 'package:adhikar2_o/widgets/customButton.dart';
@@ -17,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final loginFormKey = GlobalKey<FormState>();
-  // final AuthServices authService = AuthServices();
+  bool loading =false;
   @override
   void dispose() {
     super.dispose();
@@ -26,14 +27,23 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void loginUser() async {
+    setState(() {
+      loading=true;
+    });
     String res = await AuthServices()
         .login(email: emailController.text, password: passwordController.text);
     if (res == 'success') {
+      setState(() {
+        loading=false;
+      });
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return BottomBar();
       }));
       showSnackbar(context, 'Welcom back ${emailController.text}');
     } else {
+       setState(() {
+        loading=false;
+      });
       showSnackbar(context, res);
     }
   }
@@ -41,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: loading?Center(child: CircularProgressIndicator( color: primaryColor,),): SafeArea(
           child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -103,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const Text(
                       'Forgot password?',
-                      style: const TextStyle(color: Colors.grey, fontSize: 16),
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
                     ),
                     const SizedBox(
                       width: 5,

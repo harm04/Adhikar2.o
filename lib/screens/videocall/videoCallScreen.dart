@@ -23,7 +23,8 @@ class VideoCallScreen extends StatelessWidget {
         await FirebaseFirestore.instance
             .collection('Meetings')
             .doc(callID)
-            .update({'status': 'completed;'});
+            .update({'status': 'completed'});
+        Navigator.pop(context);
       },
     );
   }

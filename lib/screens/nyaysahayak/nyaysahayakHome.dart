@@ -1,7 +1,7 @@
 import 'package:adhikar2_o/screens/auth/loginScreen.dart';
 import 'package:adhikar2_o/screens/auth/siginScreen.dart';
-import 'package:adhikar2_o/screens/chatScreen.dart';
-import 'package:adhikar2_o/screens/docScanning.dart';
+import 'package:adhikar2_o/screens/nyaysahayak/chatScreen.dart';
+import 'package:adhikar2_o/screens/nyaysahayak/docScanning.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';

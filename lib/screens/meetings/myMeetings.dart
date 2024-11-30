@@ -1,6 +1,6 @@
 import 'package:adhikar2_o/models/userModel.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
-import 'package:adhikar2_o/screens/videoCallScreen.dart';
+import 'package:adhikar2_o/screens/videocall/videoCallScreen.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/meetingCard.dart';
 import 'package:adhikar2_o/widgets/ratingsDialoug.dart';
@@ -54,7 +54,7 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
                     .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(color: primaryColor  ));
               }
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
@@ -69,19 +69,28 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
                     return GestureDetector(
                       onTap: () {
                         meetingData['status'] == 'pending'
-                            ? Navigator.push(context,
+                            ?
+                            //  meetingData['date'] ==
+                            //             '${DateTime.now().day.toString()}/${DateTime.now().month.toString()}/${DateTime.now().year.toString()}' &&
+                            //         meetingData['time'] ==
+                            //             TimeOfDay.now()
+                            //                 .format(context)
+                            //                 .toString()
+                            //     ?
+                            Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
                                 return VideoCallScreen(
-                                  callID: meetingData['meetingUid'],
+                                  callID: meetingData['meetingUid'].toString(),
                                 );
                               }))
+                            // : SizedBox()
                             : meetingData['ratings'] == ""
                                 ? showDialog(
                                     context: context,
                                     builder: (context) {
                                       return Dialog(
                                         child: RaitngsDialoug(
-                                          callID: meetingData['meetingUid'],
+                                          callID: meetingData['meetingUid'].toString(),
                                         ),
                                       );
                                     })
@@ -91,6 +100,9 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
 
                       //if we want all meetings to be visible in my meetings section then just change meetinguid to a random uid
                       child: MeetingCard(
+                        clientName: meetingData['clientName'],
+                        isLawyer: false,
+                          amountPaid: '2409.78/-',
                           lawyerName: meetingData['lawyerName'],
                           time: meetingData['time'],
                           date: meetingData['date'],

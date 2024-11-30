@@ -1,10 +1,16 @@
 import 'package:adhikar2_o/models/lawyerModel.dart';
 import 'package:adhikar2_o/models/userModel.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
-import 'package:adhikar2_o/screens/lawyerProfile.dart';
+import 'package:adhikar2_o/screens/auth/loginScreen.dart';
+import 'package:adhikar2_o/screens/auth/siginScreen.dart';
+import 'package:adhikar2_o/screens/meetings/lawyerCompletedMeetings.dart';
+import 'package:adhikar2_o/screens/meetings/lawyerPendingMeetings.dart';
+import 'package:adhikar2_o/screens/profile/lawyerProfile.dart';
+import 'package:adhikar2_o/screens/search/searchScreen.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/lawyerCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,15 +31,85 @@ class _MarketPlaceScreenState extends State<MarketPlaceScreen> {
     'Divorce',
     'Finance'
   ];
+  void navigateToSearchScreen(String query) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return SearchScreen(query: query.toString());
+    }));
+  }
 
   String isActive = 'All';
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    if (_auth.currentUser == null) {
+      return AlertDialog(
+        title: const Text(
+          'It seems you are not authenticated..!\nTo access AI services you need to signup',
+          style: TextStyle(color: Colors.black, fontSize: 18),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return const LoginScreen();
+                }));
+              },
+              child: const Text('Login')),
+          TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return const SignUpScreen();
+                }));
+              },
+              child: const Text('Signup')),
+        ],
+      );
+    }
     UserModel userModel =
         Provider.of<UserProvider>(context, listen: false).getUser;
     return userModel.type == 'Lawyer'
-        ? const Scaffold()
+        ? DefaultTabController(
+            length: 2,
+            child: Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  backgroundColor: primaryColor,
+                  bottom: const TabBar(
+                      indicatorColor: Colors.white,
+                      dividerColor: primaryColor,
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.grey,
+                      tabs: [
+                        Tab(
+                            text: 'Pending',
+                            icon: ImageIcon(
+                              AssetImage(
+                                'assets/icons/ic_clock.png',
+                              ),
+                              size: 20,
+                            )),
+                        Tab(
+                            text: 'Completed',
+                            icon: ImageIcon(
+                              AssetImage(
+                                'assets/icons/ic_completed.png',
+                              ),
+                              size: 20,
+                            )),
+                      ]),
+                  title: const Text(
+                    'Meetings',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                body: const TabBarView(children: [
+                  LawyerPendingMeetings(),
+                  LawyerCompletedMeetings(),
+                ])))
         : Scaffold(
             body: CustomScrollView(
               slivers: [
@@ -68,6 +144,7 @@ class _MarketPlaceScreenState extends State<MarketPlaceScreen> {
                                   ),
                                   const SizedBox(height: 10),
                                   TextFormField(
+                                    onFieldSubmitted: navigateToSearchScreen,
                                     cursorColor: Colors.white,
                                     style: const TextStyle(
                                         color: Colors.white,
@@ -165,7 +242,9 @@ class _MarketPlaceScreenState extends State<MarketPlaceScreen> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const SliverToBoxAdapter(
-                        child: Center(child: CircularProgressIndicator()),
+                        child: Center(
+                            child:
+                                CircularProgressIndicator(color: primaryColor)),
                       );
                     }
                     if (snapshot.hasError) {

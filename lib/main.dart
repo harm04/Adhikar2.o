@@ -1,7 +1,7 @@
 import 'package:adhikar2_o/firebase_options.dart';
 import 'package:adhikar2_o/provider/lawyerProvider.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
-import 'package:adhikar2_o/screens/verifyLawyers.dart';
+import 'package:adhikar2_o/screens/admin/lawyerVerification/verifyLawyers.dart';
 import 'package:adhikar2_o/utils/constants.dart';
 import 'package:adhikar2_o/widgets/bottombar.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
           title: 'Adhikar',
           theme: ThemeData(
             colorScheme: const ColorScheme.light(),
+            
           ),
           debugShowCheckedModeBanner: false,
           home: LayoutBuilder(builder: (context, Constraints) {
@@ -55,7 +56,9 @@ class MyApp extends StatelessWidget {
             } else {
               return const BottomBar();
             }
-          })),
+          }
+          )
+          ),
     );
   }
 }

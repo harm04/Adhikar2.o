@@ -1,11 +1,11 @@
 import 'package:adhikar2_o/models/userModel.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
-import 'package:adhikar2_o/screens/aiServices.dart';
-import 'package:adhikar2_o/screens/applyForLawyerScreen.dart';
+import 'package:adhikar2_o/screens/nyaysahayak/nyaysahayakHome.dart';
+import 'package:adhikar2_o/screens/lawyerApplicaton/applyForLawyerScreen.dart';
 import 'package:adhikar2_o/screens/auth/loginScreen.dart';
 import 'package:adhikar2_o/screens/auth/siginScreen.dart';
-import 'package:adhikar2_o/screens/myMeetings.dart';
-import 'package:adhikar2_o/screens/verfificationPendingScreen.dart';
+import 'package:adhikar2_o/screens/meetings/myMeetings.dart';
+import 'package:adhikar2_o/screens/admin/lawyerVerification/verfificationPendingScreen.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/drawerItems.dart';
 import 'package:adhikar2_o/widgets/homeLaw.dart';

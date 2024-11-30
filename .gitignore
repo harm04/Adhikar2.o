@@ -32,6 +32,7 @@ migrate_working_dir/
 /build/
 lib/utils/constants.dart
 lib/firebase_options.dart
+lib/screens/news/newsApi.dart
 
 # Symbolication related
 app.*.symbols

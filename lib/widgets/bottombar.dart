@@ -1,8 +1,10 @@
 import 'package:adhikar2_o/provider/lawyerProvider.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
-import 'package:adhikar2_o/screens/home.dart';
-import 'package:adhikar2_o/screens/marketplace.dart';
-import 'package:adhikar2_o/screens/profile.dart';
+import 'package:adhikar2_o/screens/community/community.dart';
+import 'package:adhikar2_o/screens/home/home.dart';
+import 'package:adhikar2_o/screens/marketplace/marketplace.dart';
+import 'package:adhikar2_o/screens/news/newsFeedPage.dart';
+import 'package:adhikar2_o/screens/profile/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +32,9 @@ class _BottomBarState extends State<BottomBar> {
     // const Center(child: Text("page2()")),
     // const Center(child: Text(" LawScreen()")),
     const Center(child: MarketPlaceScreen()),
-     Center(child: ProfileScreen())
+    const NewsFeedPage(),
+    CommunityPage(),
+    Center(child: ProfileScreen())
   ];
 
   @override
@@ -88,21 +92,6 @@ class _BottomBarState extends State<BottomBar> {
                 ),
                 backgroundColor: Colors.white,
               ),
-              // BottomNavigationBarItem(
-              //   icon: ImageIcon(
-              //     const AssetImage('assets/icons/ic_document.png'),
-              //     size: 40,
-              //     color: (_page == 1) ? Colors.white : Colors.grey,
-              //   ),
-              //   backgroundColor: Colors.white,
-              // ),
-              // BottomNavigationBarItem(
-              //     icon: ImageIcon(
-              //       const AssetImage('assets/icons/ic_law.png'),
-              //       size: 40,
-              //       color: (_page == 2) ? Colors.white : Colors.grey,
-              //     ),
-              //     backgroundColor: Colors.white),
               BottomNavigationBarItem(
                 icon: ImageIcon(
                   const AssetImage('assets/icons/ic_marketplace.png'),
@@ -113,9 +102,25 @@ class _BottomBarState extends State<BottomBar> {
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(
-                  const AssetImage('assets/icons/ic_profile.png'),
+                  const AssetImage('assets/icons/ic_news.png'),
                   size: 20,
                   color: (_page == 2) ? Colors.white : Colors.grey,
+                ),
+                backgroundColor: Colors.white,
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(
+                  const AssetImage('assets/icons/ic_community.png'),
+                  size: 20,
+                  color: (_page == 3) ? Colors.white : Colors.grey,
+                ),
+                backgroundColor: Colors.white,
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(
+                  const AssetImage('assets/icons/ic_profile.png'),
+                  size: 20,
+                  color: (_page == 4) ? Colors.white : Colors.grey,
                 ),
                 backgroundColor: Colors.white,
               ),

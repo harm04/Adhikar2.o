@@ -1,6 +1,8 @@
+import 'dart:math';
+
 import 'package:adhikar2_o/models/userModel.dart';
 import 'package:adhikar2_o/provider/userProvider.dart';
-import 'package:adhikar2_o/screens/myMeetings.dart';
+import 'package:adhikar2_o/screens/meetings/myMeetings.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/customButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -240,8 +242,8 @@ class _ConfirmConsultationState extends State<ConfirmConsultation> {
                   //         .getLawyer;
 
                   //if we want all meetings to be visible in my meetings section then just change meetinguid to a random uid
-                  String meetingUid =
-                      '${userModel.uid.substring(userModel.uid.length - 5)}${widget.uid.substring(widget.uid.length - 5)}';
+                  final meetingUid =
+                     Random().nextInt(10000);
                   openCheckout(
                       razorpayAmount.toString(),
                       'Random',
@@ -253,7 +255,7 @@ class _ConfirmConsultationState extends State<ConfirmConsultation> {
                   //creating a collection named meetings
                   await FirebaseFirestore.instance
                       .collection('Meetings')
-                      .doc(meetingUid)
+                      .doc(meetingUid.toString())
                       .set({
                     "meetingUid": meetingUid,
                     "lawyerName": '${widget.firstName} ${widget.lastName}',
@@ -264,7 +266,7 @@ class _ConfirmConsultationState extends State<ConfirmConsultation> {
                     "status": "pending",
                     "profImage": widget.profImage,
                     "ratings": 3,
-                    
+                    "clientProfImage":userModel.profImage??""
                   });
 
                   //adding meeting uid in user collection

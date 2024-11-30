@@ -1,5 +1,5 @@
 import 'package:adhikar2_o/screens/auth/loginScreen.dart';
-import 'package:adhikar2_o/screens/confirmConsultation.dart';
+import 'package:adhikar2_o/screens/confirmConsultation/confirmConsultation.dart';
 import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/widgets/customButton.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -28,7 +28,8 @@ class LawyerProfileScreen extends StatefulWidget {
       required this.experience,
       required this.firstName,
       required this.lastName,
-      required this.uid, required this.profImage});
+      required this.uid,
+      required this.profImage});
 
   @override
   State<LawyerProfileScreen> createState() => _LawyerProfileScreenState();
@@ -126,18 +127,22 @@ class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
                 height: 20,
               ),
               Center(
-                child:  Container(
+                child: Container(
                   height: 250,
                   width: 250,
-                    decoration: const BoxDecoration(color: primaryColor),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.profImage,
-                      placeholder:(context, url) =>const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url,error) =>Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGkAznCVTAALTD1o2mAnGLudN9r-bY6klRFB35J2hY7gvR9vDO3bPY_6gaOrfV0IHEIUo&usqp=CAU',fit: BoxFit.cover),
-                      height: 70,
-                      width: 70,
-                      fit: BoxFit.cover,
-                    ),),
+                  decoration: const BoxDecoration(color: primaryColor),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.profImage,
+                    placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(color: primaryColor)),
+                    errorWidget: (context, url, error) => Image.network(
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGkAznCVTAALTD1o2mAnGLudN9r-bY6klRFB35J2hY7gvR9vDO3bPY_6gaOrfV0IHEIUo&usqp=CAU',
+                        fit: BoxFit.cover),
+                    height: 70,
+                    width: 70,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               Padding(
                 padding:
@@ -417,10 +422,10 @@ class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
                         return _auth.currentUser == null
                             ? const LoginScreen()
                             : ConfirmConsultation(
-                              profImage: widget.profImage,
-                              firstName: widget.firstName,
-                              lastName:   widget.lastName,
-                              uid: widget.uid,
+                                profImage: widget.profImage,
+                                firstName: widget.firstName,
+                                lastName: widget.lastName,
+                                uid: widget.uid,
                                 amount: widget.fees,
                                 date:
                                     '${_dateTime.day.toString()}/${_dateTime.month.toString()}/${_dateTime.year.toString()}',

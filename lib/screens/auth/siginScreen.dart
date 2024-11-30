@@ -1,5 +1,6 @@
 import 'package:adhikar2_o/screens/auth/loginScreen.dart';
 import 'package:adhikar2_o/services/authServices.dart';
+import 'package:adhikar2_o/utils/colors.dart';
 import 'package:adhikar2_o/utils/snackbar.dart';
 import 'package:adhikar2_o/widgets/bottombar.dart';
 import 'package:adhikar2_o/widgets/customButton.dart';
@@ -19,6 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final signUpFormKey = GlobalKey<FormState>();
+  bool loading=false;
 
   @override
   void dispose() {
@@ -30,6 +32,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void signUpUser() async {
+    setState(() {
+      loading=true;
+    });
     String res = await AuthServices().signUp(
         firstName: firstnameController.text,
         lastName: lastnameController.text,
@@ -37,11 +42,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
         type: 'User',
         password: passwordController.text);
     if (res == 'success') {
+       setState(() {
+      loading=false;
+    });
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return BottomBar();
       }));
       showSnackbar(context, 'Account created as ${emailController.text}');
     } else {
+       setState(() {
+      loading=false;
+    });
       showSnackbar(context, res);
     }
   }
@@ -49,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: loading?Center(child: CircularProgressIndicator( color: primaryColor,),): SafeArea(
           child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
