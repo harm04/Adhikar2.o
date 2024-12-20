@@ -1,3 +1,4 @@
+import 'package:adhikar2_o/models/lawyerModel.dart';
 import 'package:adhikar2_o/screens/admin/lawyerVerification/viewLawyerDocs.dart';
 import 'package:adhikar2_o/services/applyForlawyerService.dart';
 import 'package:adhikar2_o/utils/colors.dart';
@@ -44,9 +45,11 @@ class _VerifyLawyersScreenState extends State<VerifyLawyersScreen> {
                   return ListView.builder(
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (context, index) {
-                        // LawyerModel lawyerModel =
-                        //     LawyerModel.fromSnap(snapshot.data.docs[index]);
-                         var lawyerModel = snapshot.data!.docs[index].data();
+                        LawyerModel lawyerModel =
+                            LawyerModel.fromSnap(snapshot.data.docs[index]);
+                            print(lawyerModel.uid);
+                        //  var lawyerModel = snapshot.data!.docs[index].data();
+                         print(lawyerModel.uid);
                         return Column(
                           children: [
                             const SizedBox(
@@ -64,11 +67,11 @@ class _VerifyLawyersScreenState extends State<VerifyLawyersScreen> {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
-                                    '${lawyerModel['firstName']} ${lawyerModel['lastName']}',
+                                    '${lawyerModel.firstName} ${lawyerModel.lastName}',
                                     style: const TextStyle(
                                         color: Colors.black, fontSize: 20),
                                   ),
-                                  lawyerModel['approved'] != 'true'
+                                  lawyerModel.approved != 'true'
                                       ? Row(
                                           children: [
                                             GestureDetector(

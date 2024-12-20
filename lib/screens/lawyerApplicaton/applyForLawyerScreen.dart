@@ -132,6 +132,7 @@ class _ApplyForLawyerScreenState extends State<ApplyForLawyerScreen> {
     emailController.text = userModel.email;
   firstNameController.text=userModel.firstName;
   lastNameController.text=userModel.lastName;
+  userModel.profImage!=null?profImage!=userModel.profImage:profImage!="";
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -160,7 +161,7 @@ class _ApplyForLawyerScreenState extends State<ApplyForLawyerScreen> {
                     Center(
                       child: Stack(
                         children: [
-                          profImage != null
+                         profImage != null
                               ? CircleAvatar(
                                   radius: 70,
                                   backgroundColor: Colors.black,
@@ -169,7 +170,14 @@ class _ApplyForLawyerScreenState extends State<ApplyForLawyerScreen> {
                                       backgroundColor: Colors.white,
                                       backgroundImage: MemoryImage(profImage!)),
                                 )
-                              : const CircleAvatar(
+                              : userModel.profImage!=null?CircleAvatar(
+                                  radius: 70,
+                                  backgroundColor: Colors.black,
+                                  child: CircleAvatar(
+                                      radius: 66,
+                                      backgroundColor: Colors.white,
+                                      backgroundImage: NetworkImage(userModel.profImage!)),
+                                ): const CircleAvatar(
                                   radius: 70,
                                   backgroundColor: Colors.black,
                                   child: const CircleAvatar(

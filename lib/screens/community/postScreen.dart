@@ -63,7 +63,7 @@ class _PostScreenState extends State<PostScreen> {
                       CircleAvatar(
                         radius: 25,
                         backgroundColor: primaryColor,
-                        backgroundImage: widget.anonymous?NetworkImage('https://image.cdn2.seaart.me/2024-09-16/crjon2de878c739kmukg-2/363d4f7dce80aad62b4b1cdc12bb1ec6_high.webp') :NetworkImage(userModel.profImage.toString()),
+                        backgroundImage: widget.anonymous?AssetImage('assets/icons/ic_anonymous.png') :NetworkImage(userModel.profImage.toString()),
                       ),
                       SizedBox(
                         width: 7,

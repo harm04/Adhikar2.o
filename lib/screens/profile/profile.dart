@@ -78,43 +78,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     rolecontroller.dispose();
   }
 
-  void selectProfImage() async {
-   try{
-     setState(() {
-      loading=true;
-    });
-    Uint8List im = await pickImage(ImageSource.gallery);
-    setState(() async {
-      profImage = im;
-      String profImageUrl = await StorageServices()
-          .uploadImageToStorage('profileImage', profImage!);
-
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(_auth.currentUser!.uid)
-          .update({
-        'profImage': profImageUrl,
-      });
-
-      await FirebaseFirestore.instance
-          .collection('Lawyers')
-          .doc(_auth.currentUser!.uid)
-          .update({
-        'profImage': profImageUrl,
-      });
-    });
-     setState(() {
-      loading=false;
-    });
-    showSnackbar(context, 'Image updated successfully');
-   }catch(err){
-      setState(() {
-      loading=false;
-    });
-    showSnackbar(context, err.toString());
-   }
-  }
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -122,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_auth.currentUser == null) {
       return AlertDialog(
         title: const Text(
-          'It seems you are not authenticated..!\nTo access AI services you need to signup',
+          'It seems you are not authenticated..!\nTo access your profile you need to signup',
           style: TextStyle(color: Colors.black, fontSize: 18),
         ),
         actions: [
@@ -148,6 +111,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
     UserModel userModel = Provider.of<UserProvider>(context).getUser;
     // LawyerModel lawyerModel =
     //     Provider.of<LawyerProvider>(context, listen: false).getLawyer;
+
+    void selectProfImage() async {
+      try {
+        setState(() {
+          loading = true;
+        });
+        Uint8List im = await pickImage(ImageSource.gallery);
+        setState(() {
+          profImage = im;
+        });
+        String profImageUrl = await StorageServices()
+            .uploadImageToStorage('profileImage', profImage!);
+
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(_auth.currentUser!.uid)
+            .update({
+          'profImage': profImageUrl,
+        });
+
+        userModel.type == 'lawyer'
+            ? await FirebaseFirestore.instance
+                .collection('Lawyers')
+                .doc(_auth.currentUser!.uid)
+                .update({
+                'profImage': profImageUrl,
+              })
+            : SizedBox();
+        setState(() {});
+        setState(() {
+          loading = false;
+        });
+        showSnackbar(context, 'Image updated successfully');
+      } catch (err) {
+        setState(() {
+          loading = false;
+        });
+        showSnackbar(context, err.toString());
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -195,12 +199,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             } else if (snapshot.hasError) {
                               return Center(
                                   child: Text('Error: ${snapshot.error}'));
-                            } else if (!snapshot.hasData ) {
+                            } else if (!snapshot.hasData) {
                               return const Center(
                                   child: Text("No Meetings pending"));
                             } else {
                               var profdata = snapshot.data.data();
-                            
+
                               return Stack(
                                 children: [
                                   userModel.type == "User"
@@ -232,14 +236,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               radius: 66,
                                               backgroundColor: Colors.white,
                                               backgroundImage: NetworkImage(
-                                                 profdata['profImage'])),
+                                                  profdata['profImage'])),
                                         ),
                                   Positioned(
                                       bottom: -0,
                                       right: 10,
                                       child: GestureDetector(
                                         onTap: () {
-                                          selectProfImage();
+                                          setState(() {
+                                            selectProfImage();
+                                          });
                                         },
                                         child: const CircleAvatar(
                                           radius: 16,
@@ -263,10 +269,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 20,
                     ),
                     Center(
-                      child: Text(
-                        '${userModel.firstName} ${userModel.lastName}',
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${userModel.firstName} ${userModel.lastName}',
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 20),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          userModel.type == "Lawyer"
+                              ? Image.asset(
+                                  'assets/icons/ic_verified.png',
+                                  height: 25,
+                                )
+                              : SizedBox()
+                        ],
                       ),
                     ),
                     const SizedBox(

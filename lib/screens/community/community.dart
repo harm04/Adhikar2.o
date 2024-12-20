@@ -24,7 +24,7 @@ class _CommunityPageState extends State<CommunityPage> {
     if (_auth.currentUser == null) {
       return AlertDialog(
         title: const Text(
-          'It seems you are not authenticated..!\nTo access AI services you need to signup',
+          'It seems you are not authenticated..!\nTo access community you need to signup',
           style: TextStyle(color: Colors.black, fontSize: 18),
         ),
         actions: [

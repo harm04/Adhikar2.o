@@ -17,7 +17,7 @@ class LawyerProfileScreen extends StatefulWidget {
   final String caseWon;
   final String fees;
   final String profImage;
-  final String experience;
+  final String experience;final String desccription;
   const LawyerProfileScreen(
       {super.key,
       required this.profilePic,
@@ -29,7 +29,7 @@ class LawyerProfileScreen extends StatefulWidget {
       required this.firstName,
       required this.lastName,
       required this.uid,
-      required this.profImage});
+      required this.profImage, required this.desccription});
 
   @override
   State<LawyerProfileScreen> createState() => _LawyerProfileScreenState();
@@ -318,12 +318,12 @@ class _LawyerProfileScreenState extends State<LawyerProfileScreen> {
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
-              const Padding(
+               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 18.0, vertical: 6),
                 child: Text(
                     maxLines: 20,
                     overflow: TextOverflow.ellipsis,
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem'),
+                   widget.desccription),
               ),
               const SizedBox(
                 height: 20,

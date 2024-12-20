@@ -74,6 +74,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                         profilePic: lawyerModel.profImage,
                                         ratings: '2',
                                         experience: lawyerModel.experience,
+                                        desccription: lawyerModel.description,
                                         profImage: lawyerModel.profImage);
                                   }));
                                 },

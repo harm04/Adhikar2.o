@@ -151,7 +151,7 @@ class _RaitngsDialougState extends State<RaitngsDialoug> {
                   ),
                 ],
               ),
-            ))
+            ))  
       ],
     );
   }

@@ -46,7 +46,7 @@ class _MarketPlaceScreenState extends State<MarketPlaceScreen> {
     if (_auth.currentUser == null) {
       return AlertDialog(
         title: const Text(
-          'It seems you are not authenticated..!\nTo access AI services you need to signup',
+          'It seems you are not authenticated..!\nTo access marketplace you need to signup',
           style: TextStyle(color: Colors.black, fontSize: 18),
         ),
         actions: [
@@ -271,6 +271,7 @@ class _MarketPlaceScreenState extends State<MarketPlaceScreen> {
                                         MaterialPageRoute(builder: (context) {
                                       return LawyerProfileScreen(
                                           caseWon: lawyerModel.casesWon,
+                                          desccription: lawyerModel.description,
                                           fees: '1999',
                                           firstName: lawyerModel.firstName,
                                           lastName: lawyerModel.lastName,

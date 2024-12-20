@@ -83,9 +83,8 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
                                   callID: meetingData['meetingUid'].toString(),
                                 );
                               }))
-                            // : SizedBox()
-                            : meetingData['ratings'] == ""
-                                ? showDialog(
+                          :
+                            showDialog(
                                     context: context,
                                     builder: (context) {
                                       return Dialog(
@@ -94,7 +93,7 @@ class _MyMeetingsScreenState extends State<MyMeetingsScreen> {
                                         ),
                                       );
                                     })
-                                : const SizedBox();
+                                
                         ;
                       },
 

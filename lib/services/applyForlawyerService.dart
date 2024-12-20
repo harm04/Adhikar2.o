@@ -86,7 +86,7 @@ class ApplyForLawyerService {
             .doc(_auth.currentUser!.uid)
             .set(laywerModel.toJson());
         res = 'success';
-      } else {
+      }else {
         res = 'Please fill all the fields';
       }
     } catch (err) {
